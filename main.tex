@@ -4,9 +4,11 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{hyperref}
+\usepackage[colorlinks=true]{hyperref}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
+
+
 \usepackage{amsmath}
 \title{Graphs and Matrices (R.\ B.\ Bapat): Exercises Notebook}
 \author{Priyanshu Pant}
@@ -15,6 +17,11 @@
 \newcommand{\rank}{\mathrm{rank}}
 \newcommand{\adj}{\mathrm{adj}}
 \newtheorem{exercise}{Exercise}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{corollary}{Corollary}
 
 \begin{document}
 \maketitle
@@ -63,7 +70,40 @@ Show that
 and that equality holds if $A_{ij}=0$, $i>j$.
 \end{exercise}
 
-\begin{proof}\end{proof}
+\begin{proof}
+For each $i=1,\dots,k$, let $r_i=\rank(A_{ii})$.  
+Choose $r_i$ linearly independent columns from the block $A_{ii}$.
+
+Now consider in $A$ the full columns obtained by taking these chosen columns from each diagonal block.  
+We claim that all these columns are linearly independent in $A$.
+
+Indeed, suppose a linear combination of them is zero. Look at the first block of rows.  
+Since all blocks to the right of $A_{11}$ in the first block row are zero, this gives a linear relation among the chosen columns of $A_{11}$.  
+But those columns are linearly independent, so all coefficients corresponding to $A_{11}$ must be zero.
+
+Next, look at the second block of rows. After the coefficients from the first block are already known to be zero, we obtain a linear relation among the chosen columns of $A_{22}$.  
+Again, by independence of those columns, all coefficients corresponding to $A_{22}$ must be zero.
+
+Continuing in this way block by block, we conclude that all coefficients are zero.  
+Hence the selected columns are linearly independent in $A$.
+
+Therefore,
+\[
+\rank(A)\ge r_1+\cdots+r_k
+=\rank(A_{11})+\cdots+\rank(A_{kk}).
+\]
+
+Now suppose in addition that $A_{ij}=0$ for all $i>j$. Since also $A_{ij}=0$ for all $i<j$ by the given form of $A$, the matrix $A$ is block diagonal:
+\[
+A=\operatorname{diag}(A_{11},A_{22},\dots,A_{kk}).
+\]
+For a block diagonal matrix, the column space is the direct sum of the column spaces of the diagonal blocks. Hence
+\[
+\rank(A)=\rank(A_{11})+\cdots+\rank(A_{kk}).
+\]
+
+This proves the result.
+\end{proof}
 
 \begin{exercise}
 Let $A$ be an orthogonal $n\times n$ matrix. Show that $a_{11}$ and $\det A(1\mid 1)$ have the
@@ -102,8 +142,116 @@ Taking absolute values,
 Let $A$ and $G$ be matrices of order $m\times n$ and $n\times m$, respectively. Show that
 $G=A^{+}$ if and only if $A^\top A G=A^\top$ and $G^\top G A=G^\top$.
 \end{exercise}
+
 \begin{proof}
+Recall that $G=A^{+}$ if and only if the four Penrose equations hold:
+\begin{equation}\label{eq:p1}
+AGA=A,
+\end{equation}
+\begin{equation}\label{eq:p2}
+GAG=G,
+\end{equation}
+\begin{equation}\label{eq:p3}
+(AG)^\top=AG,
+\end{equation}
+\begin{equation}\label{eq:p4}
+(GA)^\top=GA.
+\end{equation}
+We prove that these are equivalent to
+\begin{equation}\label{eq:c1}
+A^\top A G=A^\top,
+\end{equation}
+\begin{equation}\label{eq:c2}
+G^\top G A=G^\top.
+\end{equation}
+
+\medskip
+\noindent
+\textbf{Forward direction.}
+Assume $G=A^+$. From \eqref{eq:p1},
+\[
+A^\top=(AGA)^\top=A^\top(AG)^\top.
+\]
+Using \eqref{eq:p3}, we get
+\[
+A^\top=A^\top AG,
+\]
+which is \eqref{eq:c1}.
+Similarly, from \eqref{eq:p2},
+\[
+G^\top=(GAG)^\top=G^\top(GA)^\top.
+\]
+Using \eqref{eq:p4}, we obtain
+\[
+G^\top=G^\top GA,
+\]
+which is \eqref{eq:c2}.
+
+\medskip
+\noindent
+\textbf{Backward direction.}
+Assume that \eqref{eq:c1} and \eqref{eq:c2} hold. We show that the four Penrose equations follow.
+First,
+\[
+(AG)^\top=G^\top A^\top.
+\]
+Using \eqref{eq:c1},
+\[
+G^\top A^\top = G^\top A^\top A G
+              = (A^\top A G)^\top G
+              = (A^\top)^\top G
+              = AG.
+\]
+Hence
+\[
+(AG)^\top=AG.
+\]
+Thus \eqref{eq:p3} holds.
+Similarly,
+\[
+(GA)^\top=A^\top G^\top.
+\]
+Using \eqref{eq:c2},
+\[
+A^\top G^\top = A^\top G^\top G A
+              = (G^\top G A)^\top A
+              = (G^\top)^\top A
+              = GA.
+\]
+Hence
+\[
+(GA)^\top=GA.
+\]
+Thus \eqref{eq:p4} holds.
+Now, from \eqref{eq:c1} and \eqref{eq:p3},
+\[
+A^\top=A^\top AG=A^\top(AG)^\top=A^\top G^\top A^\top.
+\]
+Taking transpose, we obtain
+\[
+A=AGA.
+\]
+So \eqref{eq:p1} holds.
+Likewise, from \eqref{eq:c2} and \eqref{eq:p4},
+\[
+G^\top=G^\top GA=G^\top (GA)^\top=G^\top A^\top G^\top.
+\]
+Taking transpose, we obtain
+\[
+G=GAG.
+\]
+So \eqref{eq:p2} holds.
+Therefore all four Penrose equations hold, and hence $G=A^+$.
+This proves that
+\[
+G=A^+
+\quad\Longleftrightarrow\quad
+A^\top A G=A^\top
+\ \text{ and }\
+G^\top G A=G^\top.
+\]
 \end{proof}
+
 
 \begin{exercise}
 If $A$ is a matrix of rank $1$, then show that $A^{+}=\alpha A^\top$ for some $\alpha$.
